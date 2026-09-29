@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: harvester-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: harvester_db
+      MYSQL_USER: harvester
+      MYSQL_PASSWORD: harvester_dev_password
+      MYSQL_ROOT_PASSWORD: local_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - harvester_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  harvester_mysql_data:
